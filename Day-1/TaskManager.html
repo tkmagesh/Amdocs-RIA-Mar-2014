@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<link rel="stylesheet" href="style.css">
+	<script type="text/javascript">
+	function add(x,y){
+		return x + y;
+	}
+	function isPrime(n){
+		if (n <= 3) return true;
+		for(var i=2;i<= (n/2);i++)
+			if (n % i === 0) return false;
+		return true;
+	}
+	console.log("adding 10 and 20 yields", add(10,20));
+	</script>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<div id="content">
+		<span>Task :</span>
+		<input type="text" id="txtTask">
+		<input type="button" id="btnAddTask" value="Add Task">	
+		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+		<ul id="ulTaskList">
+			<li>Task - 1</li>
+			<li>Task - 2</li>
+			<li>Task - 3</li>
+			<li>Task - 4</li>
+		</ul>
+		<div id="divMessage">[Messages will be displayed here]</div>
+	</div>
+	<hr>
+	
+</body>
+</html>

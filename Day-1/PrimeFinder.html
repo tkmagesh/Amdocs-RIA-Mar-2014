@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Prime Checker</title>
+	<script>
+	function isPrime(n){
+		if (n <= 3) return true;
+		for(var i=2;i<= (n/2);i++)
+			if (n % i === 0) return false;
+		return true;
+	}
+	function checkPrime(){
+		var txtNumber = document.getElementById("txtNumber");
+		var number = parseInt(txtNumber.value);
+		var result = isPrime(number);
+		var divResult = document.getElementById("divResult");
+		divResult.innerHTML = result;
+		if (result){
+			divResult.style.color = "green";
+		} else {
+			divResult.style.color ="red";
+		}
+	}
+	function init(){
+		var btnFindPrime = document.getElementById("btnFindPrime");
+		btnFindPrime.addEventListener("click",checkPrime)	
+	}
+	window.addEventListener("DOMContentLoaded",init);
+	</script>
+</head>
+<body>
+	<span>Number :</span>
+	<input type="text" name="" id="txtNumber">
+	<input type="button" value="Find Prime" id="btnFindPrime">
+	<div id="divResult"></div>
+	
+</body>
+</html>
