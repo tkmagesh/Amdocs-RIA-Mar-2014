@@ -4,17 +4,64 @@
 	<meta charset="UTF-8">
 	<title>Task Manager</title>
 	<link rel="stylesheet" href="style.css">
+	<style>
+	.completed{
+		border : 2px solid red;
+		font-style: italic;
+		text-decoration: line-through;
+		color : red;
+	}
+	</style>
 	<script type="text/javascript">
-	function add(x,y){
-		return x + y;
+	window.addEventListener("DOMContentLoaded",init);
+
+	function init(){
+		document.getElementById("btnAddTask").addEventListener("click",addTask);
+		document.getElementById("btnRemoveCompleted").addEventListener("click",onBtnRemoveCompletedClick);
+		document.getElementById("txtTask").addEventListener("keyup",onTxtTaskChange);
+		document.getElementById("btnAddTask").disabled = true;
+		attachTaskClick();
 	}
-	function isPrime(n){
-		if (n <= 3) return true;
-		for(var i=2;i<= (n/2);i++)
-			if (n % i === 0) return false;
-		return true;
+	
+	function onTxtTaskChange(){
+		document.getElementById("btnAddTask").disabled = (this.value.trim() === "");
 	}
-	console.log("adding 10 and 20 yields", add(10,20));
+	
+	function onBtnRemoveCompletedClick(){
+		var ulTaskList = document.getElementById("ulTaskList");
+		for(var i=ulTaskList.children.length-1;i>=0;i--)
+			if(ulTaskList.children[i].classList.contains("completed"))
+				ulTaskList.children[i].remove();
+	}
+
+	function addTask(){
+		var taskName = document.getElementById("txtTask").value,
+			ulTaskList = document.getElementById("ulTaskList");
+
+		var newTaskItem = document.createElement("li");
+		newTaskItem.innerHTML = taskName;
+		newTaskItem.addEventListener("click",onTaskClick);
+		ulTaskList.appendChild(newTaskItem);
+
+/*		var	newTaskItem = "<li>" + taskName + "</li>";
+		ulTaskList.innerHTML = ulTaskList.innerHTML + newTaskItem;
+		attachTaskClick();
+*/	}
+
+	function attachTaskClick(){
+		var ulTaskList = document.getElementById("ulTaskList");
+		for(var i=0;i<ulTaskList.children.length;i++)
+			ulTaskList.children[i].addEventListener("click",onTaskClick);
+	}
+
+	function onTaskClick(){
+		if (this.classList.contains("completed")){
+			this.classList.remove("completed");
+		} else {
+			this.classList.add("completed");
+		}
+	}
+
 	</script>
 </head>
 <body>
@@ -26,7 +73,7 @@
 		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
 		<ul id="ulTaskList">
 			<li>Task - 1</li>
-			<li>Task - 2</li>
+			<li class="completed" id="t2">Task - 2</li>
 			<li>Task - 3</li>
 			<li>Task - 4</li>
 		</ul>
