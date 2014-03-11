@@ -3,11 +3,31 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Greeting App</title>
+	<script src="jquery-1.11.0.js"></script>
+	<script>
+	function greet(){
+		var firstName = $("#txtFirstName").val(),
+			lastName = $("#txtLastName").val(),
+			greetMsg = "Hi " + firstName + " " + lastName;
+		$("#spanMessage").html(greetMsg);
+	}
+	
+	$(function(){
+		$("#btnGreet").click(greet);
+	});
+
+	//$(document).ready(init);
+	//$(init);
+
+	</script>
 </head>
 <body>
-	<div><label for="txtFirstName">First Name :</label><input type="text" name="" id="txtFirstName"></div>
-	<div><label for="txtLastName">Last Name :</label><input type="text" name="" id="txtLastName"></div>
+	<div><label for="txtFirstName" accesskey="n">First Name :</label><input type="text" name="" id="txtFirstName"></div>
+	<div><label for="txtLastName" accesskey="l">Last Name :</label><input type="text" name="" id="txtLastName"></div>
 	<div><input type="button" id="btnGreet" value="Greet"></div>
 	<div><span id="spanMessage"></span></div>
+	<script>
+
+	</script>
 </body>
 </html>

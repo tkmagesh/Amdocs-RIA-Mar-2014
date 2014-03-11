@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Salary Calculator</title>
+	<style>
+	label{
+		display : block;
+	}
+	div.valMessage{
+		display : inline;
+		
+	}
+	.invalid {
+		color : red;
+	}
+	</style>
+	<script src="jquery-1.11.0.js"></script>
+	<script>
+	$(function(){
+		$("#btnCalculate").click(onBtnCalculateClick);
+		$("#rangeTax").change(onRangeTaxChange);
+		$("div.valMessage").hide();
+	});
+	function onRangeTaxChange(){
+		$("#spanTax").html("[ " + $(this).val() + "% ]");
+	}
+	function onBtnCalculateClick(){
+		if (isValid()){
+			var basic = parseInt($("#txtBasic").val()),
+				hra = parseInt($("#txtHra").val()),
+				da = parseInt($("#txtDa").val()),
+				tax =  parseInt($("#rangeTax").val());
+
+			var gross = basic + hra + da;
+			var net = gross * ((100-tax)/100);
+			$("#divSalary").html(net);	
+		}
+	}
+	function isValid(){
+		var valid = true;
+		if (isNaN($("#txtBasic").val()) || parseInt($("#txtBasic").val() * 1) <= 0){
+			$("#txtBasic").addClass("invalid");
+			$("#txtBasic").next(".valMessage").show();
+			valid = false;
+		} else {
+			$("#txtBasic").removeClass("invalid");
+			$("#txtBasic").next(".valMessage").hide();
+			valid = true;
+		}
+		if (isNaN($("#txtHra").val()) || parseInt($("#txtHra").val() * 1) <= 0){
+			$("#txtHra").addClass("invalid");
+			$("#txtHra").next(".valMessage").show();
+			valid = false;
+		}else {
+			$("#txtHra").removeClass("invalid");
+			$("#txtHra").next(".valMessage").hide();
+			valid = true;
+		}
+
+		if (isNaN($("#txtDa").val()) || parseInt($("#txtDa").val() * 1) <= 0){
+			$("#txtDa").addClass("invalid");
+			$("#txtDa").next(".valMessage").show();
+			valid = false;
+		}else {
+			$("#txtDa").removeClass("invalid");
+			$("#txtDa").next(".valMessage").hide();
+			valid = true;
+		}
+
+	}
+
+	</script>
+</head>
+<body>
+	<h1>Salary Calculator</h1>
+	<hr>
+	<div><label for="txtBasic">Basic :</label><input type="text" name="" id="txtBasic"><div class="valMessage"><span class="invalid">*</span></div></div>
+	<div><label for="txtHra">Hra :</label><input type="text" name="" id="txtHra"><div class="valMessage"><span class="invalid">*</span></div></div>
+	<div><label for="txtDa">DA :</label><input type="text" name="" id="txtDa"><div class="valMessage"><span class="invalid">*</span></div></div>
+	<div>
+		<label for="rangeTax">Tax :</label>
+		<input type="range" name="" id="rangeTax" min="0" max="50" value="0">
+		<span id="spanTax">[Tax%]</span>
+	</div>
+	<div><input type="button" value="Calculate" id="btnCalculate"></div>
+	<div>
+		<div id="divSalary"></div>
+	</div>
+</body>
+</html>
