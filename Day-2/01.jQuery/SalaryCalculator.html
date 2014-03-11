@@ -17,16 +17,22 @@
 	</style>
 	<script src="jquery-1.11.0.js"></script>
 	<script>
+	var errorMessages = [];
 	$(function(){
 		$("#btnCalculate").click(onBtnCalculateClick);
 		$("#rangeTax").change(onRangeTaxChange);
+		$("#txtBasic").on("validate",onRequiredValidation);
+		$("#txtBasic").on("validate",onNumberValidation);
+		$("#txtHra").on("validate",onValidate);
+		$("#txtDa").on("validate",onValidate);
 		$("div.valMessage").hide();
 	});
 	function onRangeTaxChange(){
 		$("#spanTax").html("[ " + $(this).val() + "% ]");
 	}
 	function onBtnCalculateClick(){
-		var errorMessages = isValid();
+		$(":text").trigger("validate");
+				
 		if (errorMessages.length === 0){
 			var basic = parseInt($("#txtBasic").val()),
 				hra = parseInt($("#txtHra").val()),
@@ -38,44 +44,46 @@
 			$("#divSalary").html(net);	
 			$("#ulErrorList").html("");
 		} else {
-			displayErrors(errorMessages);
+			displayErrors();
 		}
 	}
-	function isValid(){
-		var	errorMessages = [];
-		if (isNaN($("#txtBasic").val()) || parseInt($("#txtBasic").val() * 1) <= 0){
-			$("#txtBasic").addClass("invalid");
-			$("#txtBasic").next(".valMessage").show();
-			errorMessages.push("Invalid Basic value");
+	function onRequiredValidation(){
+		if ($(this).val().length == 0){
+			$(this).addClass("invalid");
+			$(this).next(".valMessage").show();
+			errorMessages.push($(this).attr('data-required-message'));
 		} else {
-			$("#txtBasic").removeClass("invalid");
-			$("#txtBasic").next(".valMessage").hide();
+			$(this).removeClass("invalid");
+			$(this).next(".valMessage").hide();
 		}
-		if (isNaN($("#txtHra").val()) || parseInt($("#txtHra").val() * 1) <= 0){
-			$("#txtHra").addClass("invalid");
-			$("#txtHra").next(".valMessage").show();
-			errorMessages.push("Invalid HRA value");
-		}else {
-			$("#txtHra").removeClass("invalid");
-			$("#txtHra").next(".valMessage").hide();
-		}
-
-		if (isNaN($("#txtDa").val()) || parseInt($("#txtDa").val() * 1) <= 0){
-			$("#txtDa").addClass("invalid");
-			$("#txtDa").next(".valMessage").show();
-			errorMessages.push("Invalid DA value");
-		}else {
-			$("#txtDa").removeClass("invalid");
-			$("#txtDa").next(".valMessage").hide();
-		}
-		return errorMessages;
-
 	}
-	function displayErrors(errorMessages){
+	function onNumberValidation(){
+		if ($(this).val().length > 0 && isNaN($(this).val())) {
+			$(this).addClass("invalid");
+			$(this).next(".valMessage").show();
+			errorMessages.push($(this).attr('data-number-message'));
+		} else {
+			$(this).removeClass("invalid");
+			$(this).next(".valMessage").hide();
+		}
+	}
+	function onValidate(){
+		if (isNaN($(this).val()) || parseInt($(this).val() * 1) <= 0){
+			$(this).addClass("invalid");
+			$(this).next(".valMessage").show();
+			errorMessages.push($(this).attr('data-validation-message'));
+		} else {
+			$(this).removeClass("invalid");
+			$(this).next(".valMessage").hide();
+		}
+	}
+	
+	function displayErrors(){
 		var html = "";
 		for(var i=0;i<errorMessages.length;i++)
 			html += "<li>" + errorMessages[i] + "</li>";
 		$("#ulErrorList").html(html);
+		errorMessages=[];
 	}
 
 	</script>
@@ -83,9 +91,15 @@
 <body>
 	<h1>Salary Calculator</h1>
 	<hr>
-	<div><label for="txtBasic">Basic :</label><input type="text" name="" id="txtBasic"><div class="valMessage"><span class="invalid">*</span></div></div>
-	<div><label for="txtHra">Hra :</label><input type="text" name="" id="txtHra"><div class="valMessage"><span class="invalid">*</span></div></div>
-	<div><label for="txtDa">DA :</label><input type="text" name="" id="txtDa"><div class="valMessage"><span class="invalid">*</span></div></div>
+	<div>
+		<label for="txtBasic">Basic :</label>
+		<input type="text" name="" id="txtBasic" data-required-message="Basic is mandatory" data-number-message="Invalid Basic Value">
+		<div class="valMessage">
+			<span class="invalid">*</span>
+		</div>
+	</div>
+	<div><label for="txtHra">Hra :</label><input type="text" name="" id="txtHra" data-validation-message="Invalid HRA value"><div class="valMessage"><span class="invalid">*</span></div></div>
+	<div><label for="txtDa">DA :</label><input type="text" name="" data-validation-message="Invalid DA value" id="txtDa"><div class="valMessage"><span class="invalid">*</span></div></div>
 	<div>
 		<label for="rangeTax">Tax :</label>
 		<input type="range" name="" id="rangeTax" min="0" max="50" value="0">
