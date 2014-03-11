@@ -26,7 +26,8 @@
 		$("#spanTax").html("[ " + $(this).val() + "% ]");
 	}
 	function onBtnCalculateClick(){
-		if (isValid()){
+		var errorMessages = isValid();
+		if (errorMessages.length === 0){
 			var basic = parseInt($("#txtBasic").val()),
 				hra = parseInt($("#txtHra").val()),
 				da = parseInt($("#txtDa").val()),
@@ -35,39 +36,46 @@
 			var gross = basic + hra + da;
 			var net = gross * ((100-tax)/100);
 			$("#divSalary").html(net);	
+			$("#ulErrorList").html("");
+		} else {
+			displayErrors(errorMessages);
 		}
 	}
 	function isValid(){
-		var valid = true;
+		var	errorMessages = [];
 		if (isNaN($("#txtBasic").val()) || parseInt($("#txtBasic").val() * 1) <= 0){
 			$("#txtBasic").addClass("invalid");
 			$("#txtBasic").next(".valMessage").show();
-			valid = false;
+			errorMessages.push("Invalid Basic value");
 		} else {
 			$("#txtBasic").removeClass("invalid");
 			$("#txtBasic").next(".valMessage").hide();
-			valid = true;
 		}
 		if (isNaN($("#txtHra").val()) || parseInt($("#txtHra").val() * 1) <= 0){
 			$("#txtHra").addClass("invalid");
 			$("#txtHra").next(".valMessage").show();
-			valid = false;
+			errorMessages.push("Invalid HRA value");
 		}else {
 			$("#txtHra").removeClass("invalid");
 			$("#txtHra").next(".valMessage").hide();
-			valid = true;
 		}
 
 		if (isNaN($("#txtDa").val()) || parseInt($("#txtDa").val() * 1) <= 0){
 			$("#txtDa").addClass("invalid");
 			$("#txtDa").next(".valMessage").show();
-			valid = false;
+			errorMessages.push("Invalid DA value");
 		}else {
 			$("#txtDa").removeClass("invalid");
 			$("#txtDa").next(".valMessage").hide();
-			valid = true;
 		}
+		return errorMessages;
 
+	}
+	function displayErrors(errorMessages){
+		var html = "";
+		for(var i=0;i<errorMessages.length;i++)
+			html += "<li>" + errorMessages[i] + "</li>";
+		$("#ulErrorList").html(html);
 	}
 
 	</script>
@@ -86,6 +94,10 @@
 	<div><input type="button" value="Calculate" id="btnCalculate"></div>
 	<div>
 		<div id="divSalary"></div>
+	</div>
+	<div>
+		<ul id="ulErrorList">
+		</ul>
 	</div>
 </body>
 </html>
