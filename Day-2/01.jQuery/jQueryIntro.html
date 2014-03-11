@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery Introduction</title>
+	<style>
+	.highlight{
+		border : 2px solid red;
+	}
+	</style>
+	<script src="jquery-1.11.0.js"></script>
+	<script>
+	function clear(){
+		jQuery("*").removeClass("highlight");
+	}
+	function highLight($obj){
+		$obj.addClass("highlight");
+	}
+	</script>
+</head>
+<body>
+	<span>First Name:</span>
+	<input type="text" name="" id="txtFirstName" class="nameBox">
+	<br>
+	<span>Last Name:</span>
+	<input type="text" name="" id="txtLastName" class="nameBox">
+	<br>
+	<span>Age:</span>
+	<input type="text" name="" id="txtAge" class="numberBox">
+	<br>
+	<input type="button" value="Save" id="btnSave">
+	<input type="button" value="Clear" id="btnClear">
+	<div id="divMessage"></div>
+</body>
+</html>
