@@ -14,40 +14,48 @@
 	</style>
 	<script src="jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
-	$(init);
+	
 
-	function init(){
+	$(function (){
 		$("#btnAddTask").on("click",addTask);
 		$("#btnRemoveCompleted").on("click",onBtnRemoveCompletedClick);
 		$("#txtTask").on("keyup",onTxtTaskChange);
 		$("#btnAddTask").attr('disabled', true);
 		attachTaskClick();
-	}
+		$("#divMessage").hide();
+	});
 	
 	function onTxtTaskChange(){
 		$("#btnAddTask").attr('disabled', this.value.trim() === "");
 	}
 	
 	function onBtnRemoveCompletedClick(){
-		$("#ulTaskList > li.completed").remove();
+		$("#ulTaskList > li.completed").slideUp('slow',function(){
+			$(this).remove();
+		});
+		displayMessage("0 or more completed tasks are removed");
 	}
 
 	function addTask(){
-		var taskName = $("#txtTask").val(),
-			$ulTaskList = $("#ulTaskList");
-
-		var $newTaskItem = $("<li></li>");
-		$newTaskItem.html(taskName);
-		$newTaskItem.on("click",onTaskClick);
-		$ulTaskList.append($newTaskItem);
+		$("<li></li>")
+			.html($("#txtTask").val())
+			.hide()
+			.prependTo("#ulTaskList")
+			.slideDown('slow');
+		displayMessage("A new task is added");
 	}
 
 	function attachTaskClick(){
-		$("#ulTaskList > li").on("click",onTaskClick);
+		//$("#ulTaskList").delegate("li", "click", onTaskClick);
+		$("#ulTaskList").on("click","li",onTaskClick);
 	}
 
 	function onTaskClick(){
 		$(this).toggleClass("completed");
+	}
+
+	function displayMessage(msg){
+		$("#divMessage").text(msg).fadeIn().delay(3000).fadeOut();
 	}
 
 	</script>

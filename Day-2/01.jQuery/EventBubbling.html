@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html id="root">
+<head>
+	<title>Event Bubbling Demo</title>
+	<style>
+	div{
+		padding: 40px;
+		border-width: 2px;
+		border-style: solid;
+	}
+	#first{
+		border-color: red;
+		background-color: lightpink;
+	}
+	#second {
+		border-color: blue;
+		background-color: lightblue;
+	}
+	#third{
+		border-color: green;
+		background-color: lightgreen;
+	}
+	span{
+		padding : 20px;
+		background-color: yellow;
+		display : block;
+	}
+	</style>
+	<script>
+	window.addEventListener("DOMContentLoaded",function(){
+		/*document.getElementById("first").addEventListener("click",onClickHandler);
+		document.getElementById("second").addEventListener("click",onClickHandler);
+		document.getElementById("third").addEventListener("click",onClickHandler);
+		document.getElementById("spanContainer").addEventListener("click",onClickHandler);
+		document.body.addEventListener("click",onClickHandler);
+		document.documentElement.addEventListener("click",onClickHandler);*/
+		document.getElementById("third").addEventListener("click",onClickHandler);
+
+	});
+
+	function onClickHandler(e){
+		if (e.srcElement.tagName === "SPAN"){
+			e.srcElement.remove();
+		}
+		console.log("Element with id " + this.id + " is clicked");
+		console.dir(e);
+		//e.stopPropagation();
+	}
+	</script>
+</head>
+
+<body id="body">
+	<div id="first">
+		<div id="second">
+			<div id="third">
+				<span id="spanContainer-1">Some text-1</span>
+				<span id="spanContainer-2">Some text-2</span>
+				<span id="spanContainer-3">Some text-3</span>
+				<span id="spanContainer-4">Some text-4</span>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
