@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<link rel="stylesheet" href="style.css">
+	<style>
+	.completed{
+		border : 2px solid red;
+		font-style: italic;
+		text-decoration: line-through;
+		color : red;
+	}
+	</style>
+	<script src="jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	$(init);
+
+	function init(){
+		$("#btnAddTask").on("click",addTask);
+		$("#btnRemoveCompleted").on("click",onBtnRemoveCompletedClick);
+		$("#txtTask").on("keyup",onTxtTaskChange);
+		$("#btnAddTask").attr('disabled', true);
+		attachTaskClick();
+	}
+	
+	function onTxtTaskChange(){
+		$("#btnAddTask").attr('disabled', this.value.trim() === "");
+	}
+	
+	function onBtnRemoveCompletedClick(){
+		$("#ulTaskList > li.completed").remove();
+	}
+
+	function addTask(){
+		var taskName = $("#txtTask").val(),
+			$ulTaskList = $("#ulTaskList");
+
+		var $newTaskItem = $("<li></li>");
+		$newTaskItem.html(taskName);
+		$newTaskItem.on("click",onTaskClick);
+		$ulTaskList.append($newTaskItem);
+	}
+
+	function attachTaskClick(){
+		$("#ulTaskList > li").on("click",onTaskClick);
+	}
+
+	function onTaskClick(){
+		$(this).toggleClass("completed");
+	}
+
+	</script>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<div id="content">
+		<span>Task :</span>
+		<input type="text" id="txtTask">
+		<input type="button" id="btnAddTask" value="Add Task">	
+		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+		<ul id="ulTaskList">
+			<li>Task - 1</li>
+			<li class="completed" id="t2">Task - 2</li>
+			<li>Task - 3</li>
+			<li>Task - 4</li>
+		</ul>
+		<div id="divMessage">[Messages will be displayed here]</div>
+	</div>
+	<hr>
+	
+</body>
+</html>
