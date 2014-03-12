@@ -26,6 +26,18 @@
 	function removeTaskFromStorage(id){
 		storage.removeItem(id);
 	}
+	function getAllTasksFromStorage(){
+		var tasks = [];
+		for(var i=0;i<storage.length;i++){
+			var key = storage.key(i),
+				name = storage.getItem(key);
+			tasks.push({
+				id : key,
+				name : name
+			});
+		}
+		return tasks;
+	}
 	$(function (){
 		$("#btnAddTask").on("click",addTask);
 		$("#btnRemoveCompleted").on("click",onBtnRemoveCompletedClick);
@@ -33,7 +45,14 @@
 		$("#btnAddTask").attr('disabled', true);
 		attachTaskClick();
 		$("#divMessage").hide();
+		loadTasksFromStorage();
 	});
+
+	function loadTasksFromStorage(){
+		var tasks = getAllTasksFromStorage();
+		for(var i=0;i<tasks.length;i++)
+			addTaskToList(tasks[i]);
+	}
 	
 	function onTxtTaskChange(){
 		$("#btnAddTask").attr('disabled', this.value.trim() === "");
@@ -53,10 +72,13 @@
 	function addTask(){
 		var taskName = $("#txtTask").val();
 		var newTask = addTaskToStorage(taskName);
+		addTaskToList(newTask);
+	}
+	function addTaskToList(task){
 		$("<li></li>")
-			.html(taskName)
+			.html(task.name)
 			.hide()
-			.attr("data-task-id",newTask.id)
+			.attr("data-task-id",task.id)
 			.prependTo("#ulTaskList")
 			.slideDown('slow');
 		displayMessage("A new task is added");
@@ -72,7 +94,7 @@
 	}
 
 	function displayMessage(msg){
-		$("#divMessage").text(msg).fadeIn().delay(3000).fadeOut();
+		$("#divMessage").text(msg).fadeIn().delay(3000).fadeOut(10000);
 	}
 
 	</script>
