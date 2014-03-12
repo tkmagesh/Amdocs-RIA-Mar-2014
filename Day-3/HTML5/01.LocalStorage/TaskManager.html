@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<link rel="stylesheet" href="style.css">
+	<style>
+	.completed{
+		border : 2px solid red;
+		font-style: italic;
+		text-decoration: line-through;
+		color : red;
+	}
+	</style>
+	<script src="jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	var storage = window.localStorage;
+	function addTaskToStorage(taskName){
+		var key = new Date().getTime().toString();
+		storage.setItem(key,taskName);
+		return {
+			id : key,
+			name : taskName
+		};
+	}
+	function removeTaskFromStorage(id){
+		storage.removeItem(id);
+	}
+	$(function (){
+		$("#btnAddTask").on("click",addTask);
+		$("#btnRemoveCompleted").on("click",onBtnRemoveCompletedClick);
+		$("#txtTask").on("keyup",onTxtTaskChange);
+		$("#btnAddTask").attr('disabled', true);
+		attachTaskClick();
+		$("#divMessage").hide();
+	});
+	
+	function onTxtTaskChange(){
+		$("#btnAddTask").attr('disabled', this.value.trim() === "");
+	}
+	
+	function onBtnRemoveCompletedClick(){
+		$("#ulTaskList > li.completed").each(function(){
+			removeTaskFromStorage($(this).attr("data-task-id"));
+			$(this).slideUp(function(){
+				$(this).remove();
+			});
+		});
+		
+		displayMessage("0 or more completed tasks are removed");
+	}
+
+	function addTask(){
+		var taskName = $("#txtTask").val();
+		var newTask = addTaskToStorage(taskName);
+		$("<li></li>")
+			.html(taskName)
+			.hide()
+			.attr("data-task-id",newTask.id)
+			.prependTo("#ulTaskList")
+			.slideDown('slow');
+		displayMessage("A new task is added");
+	}
+
+	function attachTaskClick(){
+		//$("#ulTaskList").delegate("li", "click", onTaskClick);
+		$("#ulTaskList").on("click","li",onTaskClick);
+	}
+
+	function onTaskClick(){
+		$(this).toggleClass("completed");
+	}
+
+	function displayMessage(msg){
+		$("#divMessage").text(msg).fadeIn().delay(3000).fadeOut();
+	}
+
+	</script>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<div id="content">
+		<span>Task :</span>
+		<input type="text" id="txtTask">
+		<input type="button" id="btnAddTask" value="Add Task">	
+		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+		<ul id="ulTaskList">
+			
+		</ul>
+		<div id="divMessage">[Messages will be displayed here]</div>
+	</div>
+	<hr>
+	
+</body>
+</html>
