@@ -1,0 +1,26 @@
+Offline Application Cache
+
+RIA
+
+Manifest File (Cache Strategy with a catalog of the application resouces)
+
+app.manifest
+---------------------
+CACHE MANIFEST
+# VER 1.0
+
+CACHE:
+#list all the resource that should be cached by the browser
+
+NETWORK:
+#list the resource that SHOULD NOT be cached by the browser
+
+FALLBACK:
+#fallback resources (cached offline) for online resources
+taskStorage-online.js	taskStorage-offline.js
+
+
+------------------------
+
+
+<html manifest="app.manifest">

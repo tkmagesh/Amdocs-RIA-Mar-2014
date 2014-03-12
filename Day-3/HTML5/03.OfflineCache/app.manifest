@@ -1,0 +1,16 @@
+CACHE MANIFEST
+#VER 2.0
+#AUTHOR : MAGESH K
+#Expermenting with offline cache
+
+CACHE:
+style/style.css
+scripts/jquery-1.11.0.js
+scripts/TaskManager.js
+
+NETWORK:
+*
+
+FALLBACK:
+style/style-online.css	style/style-offline.css
+scripts/taskStorage-online.js	scripts/taskStorage-offline.js

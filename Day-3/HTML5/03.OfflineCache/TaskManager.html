@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" manifest="app.manifest">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<style type="text/css">
+	#updateNotification {
+		display: none;
+	}
+	</style>
+	<link rel="stylesheet" href="style/style.css">
+	<link rel="stylesheet" href="style/style-online.css">
+
+	<script src="scripts/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/taskStorage-online.js"></script>
+	<script src="scripts/TaskManager.js"></script>
+	<script>
+	window.addEventListener("DOMContentLoaded",function(){
+		applicationCache.addEventListener("updateready",function(){
+			document.getElementById("updateNotification").style.display = "block";
+		})
+		document.getElementById("btnYes").addEventListener("click",function(){
+			window.location.reload();
+		});
+		document.getElementById("btnNo").addEventListener("click",function(){
+			document.getElementById("updateNotification").style.display = "none";
+		})
+	})
+	</script>
+</head>
+<body>
+	<h1>Task Manager - Ver 2.0</h1>
+	<div id="content">
+		<span>Task :</span>
+		<input type="text" id="txtTask">
+		<input type="button" id="btnAddTask" value="Add Task">	
+		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+		<ul id="ulTaskList">
+			
+		</ul>
+		<div id="divMessage">[Messages will be displayed here]</div>
+	</div>
+	<div id="updateNotification">
+		A new version of the application is available. Do you want to load it?
+		<input type="button" value="Yes" id="btnYes"><input type="button" value=" No " id="btnNo">
+	</div>
+	<hr>
+	
+</body>
+</html>

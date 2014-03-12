@@ -1,21 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Task Manager</title>
-	<link rel="stylesheet" href="style.css">
-	<style>
-	.completed{
-		border : 2px solid red;
-		font-style: italic;
-		text-decoration: line-through;
-		color : red;
-	}
-	</style>
-	<script src="jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
-	<script src="taskStorage.js"></script>
-	<script type="text/javascript">
-
 	$(function (){
 		$("#btnAddTask").on("click",addTask);
 		$("#btnRemoveCompleted").on("click",onBtnRemoveCompletedClick);
@@ -74,22 +56,3 @@
 	function displayMessage(msg){
 		$("#divMessage").text(msg).fadeIn().delay(3000).fadeOut(10000);
 	}
-
-	</script>
-</head>
-<body>
-	<h1>Task Manager</h1>
-	<div id="content">
-		<span>Task :</span>
-		<input type="text" id="txtTask">
-		<input type="button" id="btnAddTask" value="Add Task">	
-		<input type="button" value="Remove Completed" id="btnRemoveCompleted">
-		<ul id="ulTaskList">
-			
-		</ul>
-		<div id="divMessage">[Messages will be displayed here]</div>
-	</div>
-	<hr>
-	
-</body>
-</html>
