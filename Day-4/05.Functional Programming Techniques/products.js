@@ -114,3 +114,50 @@ function countBy(list,predicateFn){
 		result += predicateFn(list[i]) ? 1 : 0;
 	return result;
 }
+
+function all(list,predicateFn){
+  for(var i=0;i<list.length;i++) 
+    if (!predicateFn(list[i])) return false;
+  return true;
+}
+
+function any(list,predicateFn){
+  for(var i=0;i<list.length;i++) 
+    if (predicateFn(list[i])) return true;
+  return false;
+}
+
+function groupBy(list,attrName){
+  var result = {};
+  for(var i=0;i<list.length;i++){
+    var key = list[i][attrName];
+    if (typeof result[key] === "undefined") result[key] = [];
+    result[key].push(list[i]);
+  }
+  return result;
+}
+
+var categorizedProducts = groupBy(products,"category")
+console.table(categorizedProducts())
+
+var categories = [
+	{id : 1, name : "stationary"},
+	{id : 2, name : "grocery"}
+]
+
+function join(leftList,rightList,leftKeySelector, rightKeySelector, joinerFn){
+  var result = [];
+  for(var i=0;i<leftList.length;i++)
+    for(var j=0;j<rightList.length;j++){
+       var leftKey = leftKeySelector(leftList[i]),
+           rightKey = rightKeySelector(rightList[j]);
+       if (leftKey === rightKey) result.push(joiner(leftList[i],rightList[j]));
+    }
+  return result;
+}
+
+var joinedProducts = join(products,categories,
+   function(p){ return p.category;},
+   function(c){ return c.id},
+   function(p,c){ return { id : p.id, name:p.name, cost :p.cost, units : p.units, category : c.name }; }
+)
