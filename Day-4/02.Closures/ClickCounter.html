@@ -4,6 +4,20 @@
 	<meta charset="UTF-8">
 	<title>Click Counter</title>
 	<script type="text/javascript">
+		(function(){
+			var counter = 0;
+			window.addEventListener("DOMContentLoaded",init);
+			function init(){
+				document.getElementById("btnCount").addEventListener("click",onBtnCountClick);
+			}
+			function onBtnCountClick(){
+				++counter;
+				displayCounter();
+			}
+			function displayCounter(){
+				document.getElementById("divMessage").innerText = counter;
+			}
+		})();
 		
 	</script>
 </head>
