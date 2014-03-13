@@ -66,6 +66,51 @@ function sort(list,comparerFn){
        }
 }
 
+
 //Write the "filter" function based on the following usage example
+
+//Solution
+function filter(list,predicateFn){
+  var result = [];
+  for(var i=0;i<list.length;i++)
+    if (predicateFn(list[i]))
+       result.push(list[i]);
+  return result;
+}
+
+
 var cheapProducts = filter(products,function(p){ return p.cost < 50;})
 console.table(cheapProducts) // will display all the products that cost less than 50
+
+function min(list,valueSelectorFn){
+   var result = Number.MAX_VALUE;
+   for(var i=0;i<list.length;i++){
+     var currVal = valueSelectorFn(list[i]);
+     if (currVal < result) result = currVal;
+   }
+   return result;
+}
+
+function max(list,valueSelectorFn){
+   var result = Number.MIN_VALUE;
+   for(var i=0;i<list.length;i++){
+     var currVal = valueSelectorFn(list[i]);
+     if (currVal > result) result = currVal;
+   }
+   return result;
+}
+
+function sum(list,valueSelectorFn){
+   var result = 0;
+   for(var i=0;i<list.length;i++){
+     result += valueSelectorFn(list[i]);
+   }
+   return result;
+}
+
+function countBy(list,predicateFn){
+	var result = 0;
+	for(var i=0;i<list.length;i++)
+		result += predicateFn(list[i]) ? 1 : 0;
+	return result;
+}
