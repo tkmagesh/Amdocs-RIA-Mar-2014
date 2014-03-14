@@ -11,24 +11,113 @@
 	}
 	</style>
 	<script type="text/javascript">
+	function SalaryCalculator(){
+		var _salary = 0,
+			_basic = 0,
+			_hra = 0,
+			_da = 0,
+			_tax = 0;
+		this.basic = function(val){
+			if (typeof val === "undefined") return _basic;
+			_basic = val;
+			this.triggerChange("basic");
+		};
+		this.hra = function(val){
+			if (typeof val === "undefined") return _hra;
+			_hra = val;
+			this.triggerChange("hra");
+		};
+		this.da = function(val){
+			if (typeof val === "undefined") return _da;
+			_da = val;
+			this.triggerChange("da");
+		};
+		this.tax = function(val){
+			if (typeof val === "undefined") return _tax;
+			_tax = val;
+			this.triggerChange("tax");
+		};
+		this.salary = function(val){
+			if (typeof val === "undefined") return _salary;
+			_salary = val;
+			this.triggerChange("salary");
+		};
+		//this.onSalaryChange = function(){};
+	}
+	SalaryCalculator.prototype.Calculate = function(){
+		var gross = this.basic() + this.hra() + this.da();
+		var net = ((100 - this.tax())/100) * gross;
+		this.salary(net);
+		//this.onSalaryChange();
+
+	}
+	SalaryCalculator.prototype.onChange = function(attrName,callbackFn){
+		if (!this._events) this._events = {};
+		if (typeof this._events[attrName] === "undefined") this._events[attrName] = [];
+		this._events[attrName].push(callbackFn);
+	}
+	SalaryCalculator.prototype.triggerChange = function(attrName){
+		for(var i=0;!!this._events[attrName] && i < this._events[attrName].length;i++){
+			var callback = this._events[attrName][i];
+			callback();
+		}
+	}
+
+
+	var calc = new SalaryCalculator();
 	$(function(){
-		$("#btnCalculate").click(function(){
-			var basic = parseInt($("#txtBasic").val()),
-				hra = parseInt($("#txtHra").val()),
-				da = parseInt($("#txtDa").val()),
-				tax = parseInt($("#rangeTax").val()),
-				gross = basic + hra + da,
-				net = ((100 - tax)/100) * gross;
-			$("#divSalary").text(net);
+		
+		/*calc.onSalaryChange = function(){
+			$("#divSalary").text(calc.salary);
+		}*/
+		// Reacting to model changes
+		calc.onChange("salary",function(){
+			$("#divSalary").text(calc.salary());
+		});
+		calc.onChange("basic",function(){
+			$("#txtBasic").val(calc.basic());
+		});
+		calc.onChange("hra",function(){
+			$("#txtHra").val(calc.hra());
+		});
+		calc.onChange("da",function(){
+			$("#txtDa").val(calc.da());
+		});
+		calc.onChange("tax",function(){
+			$("#rangeTax").val(calc.tax());
+			$("#spanTax").text(calc.tax());
+		});
+		
+
+		//Reacting to View Changes
+		$("#txtBasic").change(function(){
+			calc.basic(parseInt(this.value));
 		});
 
-		$("#rangeTax").change(function(){
-			$("#spanTax").text(this.value);
+		$("#txtHra").change(function(){
+			calc.hra(parseInt(this.value));
 		});
+	
+		$("#txtDa").change(function(){
+			calc.da(parseInt(this.value));
+		});
+	
+		$("#rangeTax").change(function(){
+			calc.tax(parseInt(this.value));
+			
+		});
+	
+		$("#btnCalculate").click(function(){
+			calc.Calculate();
+		});
+
+		
 	});
+
 	</script>
 </head>
 <body>
+	<input type="button" value="Dummy" id="btnDummy">
 	<h1>Salary Calculator</h1>
 	<hr>
 	<div>
