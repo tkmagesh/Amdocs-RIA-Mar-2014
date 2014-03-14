@@ -78,6 +78,16 @@ function filter(list,predicateFn){
   return result;
 }
 
+//Solution using recursion (pure function implementation)
+function filter(list,predicateFn){
+  var intermediateResult = arguments[2] || [];
+  if (!list.length) return arguments[2];
+  if (predicateFn(list[0])) intermediateResult.push(list[0]);
+  return filter.call(this,list.slice(1),predicateFn,intermediateResult);
+}
+
+
+
 
 var cheapProducts = filter(products,function(p){ return p.cost < 50;})
 console.table(cheapProducts) // will display all the products that cost less than 50
