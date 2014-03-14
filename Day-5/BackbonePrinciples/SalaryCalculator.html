@@ -64,80 +64,98 @@
 	}
 
 
-	var calc = new SalaryCalculator();
-	$(function(){
-		
-		/*calc.onSalaryChange = function(){
-			$("#divSalary").text(calc.salary);
-		}*/
-		// Reacting to model changes
-		calc.onChange("salary",function(){
-			$("#divSalary").text(calc.salary());
-		});
-		calc.onChange("basic",function(){
-			$("#txtBasic").val(calc.basic());
-		});
-		calc.onChange("hra",function(){
-			$("#txtHra").val(calc.hra());
-		});
-		calc.onChange("da",function(){
-			$("#txtDa").val(calc.da());
-		});
-		calc.onChange("tax",function(){
-			$("#rangeTax").val(calc.tax());
-			$("#spanTax").text(calc.tax());
-		});
-		
-
-		//Reacting to View Changes
-		$("#txtBasic").change(function(){
-			calc.basic(parseInt(this.value));
-		});
-
-		$("#txtHra").change(function(){
-			calc.hra(parseInt(this.value));
-		});
 	
-		$("#txtDa").change(function(){
-			calc.da(parseInt(this.value));
-		});
-	
-		$("#rangeTax").change(function(){
-			calc.tax(parseInt(this.value));
+
+	function SalaryCalculatorView(model, templateId){
+		var calc = model,
+			_templateId = "#" + templateId;
 			
-		});
-	
-		$("#btnCalculate").click(function(){
-			calc.Calculate();
-		});
+		this.$root = $("<div></div>");
 
+		this.init = function(){
+			var that = this;
+			// Reacting to model changes
+			calc.onChange("salary",function(){
+				that.$root.find("#divSalary").text(calc.salary());
+			});
+			calc.onChange("basic",function(){
+				that.$root.find("#txtBasic").val(calc.basic());
+			});
+			calc.onChange("hra",function(){
+				that.$root.find("#txtHra").val(calc.hra());
+			});
+			calc.onChange("da",function(){
+				that.$root.find("#txtDa").val(calc.da());
+			});
+			calc.onChange("tax",function(){
+				that.$root.find("#rangeTax").val(calc.tax());
+				that.$root.find("#spanTax").text(calc.tax());
+			});
+			
+
+			//Reacting to View Changes
+			this.$root.on("change","#txtBasic",function(){
+				calc.basic(parseInt(this.value));
+			});
+
+			this.$root.on("change","#txtHra",function(){
+				calc.hra(parseInt(this.value));
+			});
+		
+			this.$root.on("change","#txtDa",function(){
+				calc.da(parseInt(this.value));
+			});
+		
+			this.$root.on("change","#rangeTax",function(){
+				calc.tax(parseInt(this.value));
+				
+			});
+		
+			this.$root.on("click","#btnCalculate", function(){
+				calc.Calculate();
+			});
+
+		}
+		this.render = function(){
+			var template = $(_templateId).html();
+			this.$root.append(template);
+			return this;
+		}
+	}
+
+	$(function(){
+		var calc = new SalaryCalculator();
+		var calcView = new SalaryCalculatorView(calc,"calculatorTemplate");
+		calcView.init();
+		calcView.render();
+		$(document.body).append(calcView.$root);
+		
 		
 	});
 
 	</script>
+	<script type="text/template" id="calculatorTemplate">
+		<h1>Salary Calculator</h1>
+		<hr>
+		<div>
+			<label for="txtBasic">Basic :</label>
+			<input type="text" name="" id="txtBasic" >
+		</div>
+		<div><label for="txtHra">Hra :</label><input type="text" name="" id="txtHra" ></div>
+		<div><label for="txtDa">DA :</label><input type="text" id="txtDa" ></div>
+		<div>
+			<label for="rangeTax">Tax :</label>
+			<input type="range" name="" id="rangeTax" min="0" max="50" value="0">
+			<span id="spanTax">[Tax%]</span>
+		</div>
+		<div><input type="button" value="Calculate" id="btnCalculate"></div>
+		<div>
+			<div id="divSalary"></div>
+		</div>
+		<hr>
+	</script>
 </head>
 <body>
-	<input type="button" value="Dummy" id="btnDummy">
-	<h1>Salary Calculator</h1>
-	<hr>
-	<div>
-		<label for="txtBasic">Basic :</label>
-		<input type="text" name="" id="txtBasic" >
-	</div>
-	<div><label for="txtHra">Hra :</label><input type="text" name="" id="txtHra" ></div>
-	<div><label for="txtDa">DA :</label><input type="text" id="txtDa" ></div>
-	<div>
-		<label for="rangeTax">Tax :</label>
-		<input type="range" name="" id="rangeTax" min="0" max="50" value="0">
-		<span id="spanTax">[Tax%]</span>
-	</div>
-	<div><input type="button" value="Calculate" id="btnCalculate"></div>
-	<div>
-		<div id="divSalary"></div>
-	</div>
-	<div>
-		<ul id="ulErrorList">
-		</ul>
-	</div>
+	
 </body>
 </html>
